@@ -7,11 +7,11 @@ public class MainClassTest {
     MainClass mainClass = new MainClass();
 
     @Test
-    public void testGetLocalNumber() {
-        int actual = mainClass.getLocalNumber();
-        int  expected = 14;
+    public void testGetClassNumber() {
+        int actual = mainClass.getClassNumber();
+        int  expected = 45;
 
-        Assert.assertTrue("возвращается не число " + expected, actual == expected);
+        Assert.assertTrue("возвращаемое число меньше " + expected, actual > expected);
 
 
     }
