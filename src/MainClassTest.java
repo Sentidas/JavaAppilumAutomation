@@ -7,11 +7,13 @@ public class MainClassTest {
     MainClass mainClass = new MainClass();
 
     @Test
-    public void testGetClassNumber() {
-        int actual = mainClass.getClassNumber();
-        int  expected = 45;
+    public void testGetClassString() {
+        String actual = mainClass.getClassString ();
+        String expected1 = "Hello";
+        String expected2 = "hello";
+        Assert.assertTrue("фраза не содержит " + expected1 + " или " + expected2,
+                actual.contains(expected1) || actual.contains(expected2));
 
-        Assert.assertTrue("возвращаемое число меньше " + expected, actual > expected);
 
 
     }
