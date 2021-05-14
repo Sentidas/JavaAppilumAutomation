@@ -1,4 +1,4 @@
-/*Написать тест, который:
+package MyTasks;/*Написать тест, который:
         1. Сохраняет две статьи в одну папку
         2. Удаляет одну из статей
         3. Убеждается, что вторая осталась
@@ -81,7 +81,8 @@ public class TestEx5 {
                 5
         );
         waitForElementAndClick(
-                By.xpath("//*[@text='Add to reading list']"),
+               // By.xpath("//android.widget.TextView[@text='Add to reading list']"),
+                By.xpath("//android.widget.ListView/android.widget.LinearLayout[3]"),
                 "Cannot find option to add article to reading list",
                 5
         );
@@ -97,6 +98,7 @@ public class TestEx5 {
                 5
         );
         String nameOfFolder = "viaje";
+
         waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/text_input"),
                 nameOfFolder,
@@ -144,7 +146,8 @@ public class TestEx5 {
                 5
         );
         waitForElementAndClick(
-                By.xpath("//*[@text='Add to reading list']"),
+               // By.xpath("//*[@text='Add to reading list']"),
+                By.xpath("//android.widget.ListView/android.widget.LinearLayout[3]"),
                 "Cannot find option to add article to reading list",
                 5
         );
@@ -169,7 +172,7 @@ public class TestEx5 {
         );
 
         waitForElementAndClick(
-                By.xpath("//*[@text='" + nameOfFolder + "']"),
+                By.xpath("//android.widget.TextView[@text='" + nameOfFolder + "']"),
                 "Cannot find created folder",
                 15
         );
