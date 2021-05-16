@@ -1,18 +1,21 @@
+package RefactoringEx7.lib;
+
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
+import java.util.SplittableRandom;
 
-public class FirstTest {
-
-    private AppiumDriver driver;
-
-    @Before
-    public void setUp() throws Exception {
+public class CoreTestCase extends TestCase {
+       protected AppiumDriver driver;
+       private static String appiumUrl = "http://127.0.0.1:4723/wd/hub";
+     @Override
+     public void setUp() throws Exception {
+        super.setUp();
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         capabilities.setCapability("platformName", "Android");
@@ -23,15 +26,14 @@ public class FirstTest {
         capabilities.setCapability("appActivity", ".main.MainActivity");
         capabilities.setCapability("app", "C:/Users/Lena/Projects/JavaAppiumAutomation/apks/org.wikipedia.apk");
 
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver = new AndroidDriver(new URL(appiumUrl), capabilities);
     }
-        @After
-        public void tearDown(){
-            driver.quit();
-        }
-        @Test
-        public void firstTest() {
-            System.out.println("Hello, my first test");
 
+    @Override
+    public void tearDown() throws Exception {
+
+        driver.quit();
+        super.tearDown();
     }
+
 }
