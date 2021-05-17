@@ -18,6 +18,7 @@ public class MainPageObject {
     public MainPageObject(AppiumDriver driver) {
         this.driver = driver;
     }
+
     public void assertElementHasText(By by, String value, String errorMessage) {
         WebElement element = waitForELementPresent(by, errorMessage);
         String textElement = element.getAttribute("text");
@@ -64,13 +65,14 @@ public class MainPageObject {
                 ExpectedConditions.invisibilityOfElementLocated(by)
         );
     }
-    public WebElement waitForElementAndClear(By by, String errorMessage, long timeOutInSeconds){
+
+    public WebElement waitForElementAndClear(By by, String errorMessage, long timeOutInSeconds) {
         WebElement element = waitForELementPresent(by, errorMessage, timeOutInSeconds);
         element.clear();
         return element;
     }
 
-    public void swipeUp (int timeOfSwipe) {
+    public void swipeUp(int timeOfSwipe) {
 
         TouchAction action = new TouchAction(driver);
         Dimension size = driver.manage().window().getSize(); // получаем параметры экрана
@@ -88,7 +90,7 @@ public class MainPageObject {
         //perfome - отсылает всю нашу послед на выполнение
     }
 
-    public void swipeUpQuick () {
+    public void swipeUpQuick() {
         swipeUp(200);
     }
 
@@ -107,6 +109,7 @@ public class MainPageObject {
             System.out.println("количество свайпов " + alreadySwiped);
         }
     }
+
     public void swipeElementToLeft(By by, String errorMessage) {
 
         WebElement element = waitForELementPresent(by, errorMessage, 10);
@@ -124,7 +127,8 @@ public class MainPageObject {
                 .release()
                 .perform();
     }
-    public int getAmountOfElements(By by){
+
+    public int getAmountOfElements(By by) {
         List elements = driver.findElements(by);
         return elements.size();
     }
@@ -136,21 +140,6 @@ public class MainPageObject {
             throw new AssertionError(defoultMessage + " " + errorMessage);
         }
     }
-    
-
-
-    public void waitForElementsAndCheckNameinArticles(By by, String search, String errorMessage ) {
-        ArrayList<String> errors = new ArrayList();
-        List<WebElement> elements = waitForELementsPresent(by, errorMessage);
-        for (WebElement element : elements) {
-            String name = element.getText();
-            if (!name.toLowerCase().contains(search)) {
-                errors.add(name);
-            }
-        }
-        Assert.assertEquals(
-                "word '" +  search + "' not find in " + errors.size()+ " articles - " + errors + " ", 0, errors.size());
-    }
 
     public List waitForELementsPresent(By by, String errorMessage) {
 
@@ -160,12 +149,25 @@ public class MainPageObject {
                 ExpectedConditions.presenceOfAllElementsLocatedBy(by)
         );
     }
+
     public void assertElementPresent(By by, String errorMessage) {
 
         int amountOfElements = getAmountOfElements(by);
-        if (amountOfElements < 1 ) {
+        if (amountOfElements < 1) {
             String defoultMessage = "an element '" + by.toString() + "'supposed to be not present";
             throw new AssertionError(defoultMessage + " " + errorMessage);
         }
+    }
+
+    public int waitForElementsAndCheckNameinArticles(By by, String search, String errorMessage) {
+        ArrayList<String> errors = new ArrayList();
+        List<WebElement> elements = waitForELementsPresent(by, errorMessage);
+        for (WebElement element : elements) {
+            String name = element.getText();
+            if (!name.toLowerCase().contains(search)) {
+                errors.add(name);
+            }
+        }
+        return errors.size();
     }
 }
