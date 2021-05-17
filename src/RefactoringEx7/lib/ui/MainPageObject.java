@@ -1,5 +1,6 @@
 package RefactoringEx7.lib.ui;
 
+import RefactoringEx7.lib.CoreTestCase;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import org.junit.Assert;
@@ -12,7 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainPageObject {
+public class MainPageObject extends CoreTestCase {
     protected AppiumDriver driver; // инициализируем драйвер
 
     public MainPageObject(AppiumDriver driver) {
@@ -23,7 +24,7 @@ public class MainPageObject {
         WebElement element = waitForELementPresent(by, errorMessage);
         String textElement = element.getAttribute("text");
 
-        Assert.assertEquals(
+        assertEquals(
                 errorMessage,
                 value,
                 textElement

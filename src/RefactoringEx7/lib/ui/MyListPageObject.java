@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 public class MyListPageObject extends MainPageObject {
 
     private static final String
-            FOLDER_BY_NAME_TPL = "//*[@text='{FOLDER_NAME}']",
+            FOLDER_BY_NAME_TPL = "//android.widget.FrameLayout//android.widget.TextView[@text='{FOLDER_NAME}']",
             ARTICLE_BY_TITLE_TPL = "//*[@text='{TITLE}']";
 
     public MyListPageObject(AppiumDriver driver){
