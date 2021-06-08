@@ -3,25 +3,23 @@ package RefactoringEx7.lib.ui;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 
-public class SearchPageObject extends MainPageObject {
-    private static final String
+abstract public class SearchPageObject extends MainPageObject {
 
-            SEARCH_INIT_ELEMENT = "xpath://*[@text='Search Wikipedia']",
-    //SEARCH_CHECK_TEXT_ELEMENT = "org.wikipedia:id/search_container",
-    SEARCH_INPUT = "xpath://*[contains(@text, 'Search…')]",
-    SEARCH_TITLE_IN_ARTICLE = "id:org.wikipedia:id/page_list_item_title",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-            SEARCH_RESULT_BY_SUBSTRING_TRL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
-            SEARCH_RESULT_ELEMENT = "xpath://*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_EMPTY_RESULT_ELEMENT = "xpath://*[@text='No results found']";
-    // By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+    protected static  String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_TITLE_IN_ARTICLE,
+            SEARCH_CANCEL_BUTTON,
+            SEARCH_RESULT_BY_SUBSTRING_TRL,
+            SEARCH_RESULT_ELEMENT,
+            SEARCH_EMPTY_RESULT_ELEMENT;
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
     }
 
     /* TEMPLATES METHODS */
-    private static String getResultSearchElement (String substring) {
+    public static String getResultSearchElement (String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TRL.replace("{SUBSTRING}", substring);
     }
     /* TEMPLATES METHODS  - методы шаблонов */
@@ -62,11 +60,16 @@ public class SearchPageObject extends MainPageObject {
         String searchResultXpath = getResultSearchElement(substring);
         this.waitForELementPresent(searchResultXpath,  "Cannot find search result with substring");
     }
+    public void waitForArticleWithName (String substring) {
+
+        String searchResultXpath = getResultSearchElement(substring);
+        this.waitForELementPresent(searchResultXpath,  "Cannot find article in save list with title: " + substring);
+    }
 
     public void clickByArticleWithSubstring(String substring) {
 
         String searchResultXpath = getResultSearchElement(substring);
-        this.waitForElementAndClick(searchResultXpath,  "Cannot find and click search result with substring", 10);
+        this.waitForElementAndClick(searchResultXpath,  "Cannot find and click search result with substring", 15);
 
     }
 
@@ -88,6 +91,10 @@ public class SearchPageObject extends MainPageObject {
     }
     public void assertThereIsNoResultsOfSearch(){
         this.assertElementNotPresent(SEARCH_EMPTY_RESULT_ELEMENT, "Not supposed to find any results");
+    }
+
+    public void assertElementPresent(){
+        this.assertElementPresent(SEARCH_EMPTY_RESULT_ELEMENT, "Not supposed to find any results");
     }
 
     public int waitForElementsAndCheckNameinArticles(String search) {

@@ -1,14 +1,19 @@
 package RefactoringEx7.lib.ui;
 
 import RefactoringEx7.lib.CoreTestCase;
+import RefactoringEx7.lib.Platform;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -22,8 +27,12 @@ public class MainPageObject extends CoreTestCase {
 
     public void assertElementHasText(String locator, String value, String errorMessage) {
         WebElement element = waitForELementPresent(locator, errorMessage);
-        String textElement = element.getAttribute("text");
-
+        String textElement;
+        if(Platform.getInstance().isAndroid()) {
+             textElement = element.getAttribute("text");
+        } else {
+            textElement = element.getAttribute("name");
+        }
         assertEquals(
                 errorMessage,
                 value,
@@ -85,13 +94,12 @@ public class MainPageObject extends CoreTestCase {
         int start_y = (int) (size.height * 0.8); // внизу экрана, около 80 %
         int end_y = (int) (size.height * 0.2);
 
-       // action
-       //         .press(x, start_y)
-        //        .waitAction(timeOfSwipe)
-         //       .moveTo(x, end_y)
-         //       .release()
-          //      .perform(); // послед для свайпа, нажали, держим, двигаем, отпускаем
-        //perfome - отсылает всю нашу послед на выполнение
+        action
+                .press(PointOption.point(x, start_y))
+                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
+                .moveTo(PointOption.point(x, end_y))
+                .release()
+                .perform();
     }
 
     public void swipeUpQuick() {
@@ -113,6 +121,41 @@ public class MainPageObject extends CoreTestCase {
             System.out.println("количество свайпов " + alreadySwiped);
         }
     }
+    public void swipeUpTitleElementAppear(String locator, String errorMessage, int maxSwipes) {
+
+        int alreadySwiped = 0;
+        while (!this.isElementLocationOntheScreen(locator)) {
+            if (alreadySwiped > maxSwipes) {
+                Assert.assertTrue(errorMessage, this.isElementLocationOntheScreen(locator));
+            }
+            swipeUpQuick();
+            ++alreadySwiped;
+            System.out.println("количество свайпов " + alreadySwiped);
+        }
+    }
+
+    public boolean isElementLocationOntheScreen(String locator) {
+        int element_location_by_y = this.waitForELementPresent(locator,
+                "Cannot find element by locator", 1).getLocation().getY();
+        int screen_size_by_y = driver.manage().window().getSize().getHeight();
+        return element_location_by_y < screen_size_by_y;
+    }
+
+    public void clickElementToTheRightUpperCorner(String locator, String error_message){
+
+        WebElement element = this.waitForELementPresent(locator + "/..", error_message);
+        int right_x = element.getLocation().getX();
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int middle_y = (upper_y + lower_y)/2;
+        int width = element.getSize().getWidth();
+
+        int point_to_click_x = (right_x + width) - 3;
+        int point_to_click_y = middle_y;
+
+        TouchAction action = new TouchAction(driver);
+        action.tap(PointOption.point(point_to_click_x,point_to_click_y)).perform();
+    }
 
     public void swipeElementToLeft(String locator, String errorMessage) {
 
@@ -124,14 +167,21 @@ public class MainPageObject extends CoreTestCase {
         int lower_y = upper_y + element.getSize().getHeight();
         int middle_y = (upper_y + lower_y) / 2; // ищем середину у элемента по оси у где будем свайпить
 
-       // TouchAction action = new TouchAction(driver);
-       // action
-        //        .press(right_x, middle_y)
-         //       .waitAction(300).moveTo(left_x, middle_y)
-          //      .release()
-          //      .perform();
-    }
+       TouchAction action = new TouchAction(driver);
+       action.press(PointOption.point(right_x, middle_y));
+       action.waitAction(WaitOptions.waitOptions(Duration.ofMillis(900)));
 
+       if(Platform.getInstance().isAndroid())
+       {
+           action.moveTo(PointOption.point(left_x, middle_y));
+       } else {
+           int offset_x = (-1 * element.getSize().getWidth());
+           action.moveTo(PointOption.point(offset_x,0));
+       }
+       action.release();
+       action.perform();
+    }
+    
     public int getAmountOfElements(String locator) {
         By by = this.getLocatorByString(locator);
         List elements = driver.findElements(by);

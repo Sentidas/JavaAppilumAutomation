@@ -3,6 +3,8 @@ package RefactoringEx7.tests;
 import RefactoringEx7.lib.CoreTestCase;
 import RefactoringEx7.lib.ui.ArticlePageObject;
 import RefactoringEx7.lib.ui.SearchPageObject;
+import RefactoringEx7.lib.ui.factories.ArticlePageObjectFactory;
+import RefactoringEx7.lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,12 +12,14 @@ public class ChangeAppConditonTests extends CoreTestCase {
 
     @Test
     public void testChangeScreenOrientaionOnSearchResults() {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Havana");
-        searchPageObject.clickByArticleWithSubstring("Capital and largest city of Cuba");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
 
         String titleBeforeRotation = articlePageObject.getArticleTitle();
 
@@ -41,17 +45,17 @@ public class ChangeAppConditonTests extends CoreTestCase {
 
     }
 
-    @Test
-    public void testCheckSearchArticleInBackground() {
+    //@Test
+   // public void testCheckSearchArticleInBackground() {
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Havana");
-        searchPageObject.waitForSearchResult("Capital and largest city of Cuba");
-        this.backgroundApp(2);
+    //    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    //    searchPageObject.initSearchInput();
+     //   searchPageObject.typeSearchLine("Havana");
+     //   searchPageObject.waitForSearchResult("Capital and largest city of Cuba");
+     //   this.backgroundApp(2);
 
-        searchPageObject.waitForSearchResult("Capital and largest city of Cuba");
-    }
+      //  searchPageObject.waitForSearchResult("Capital and largest city of Cuba");
+   // }
 
 
 }

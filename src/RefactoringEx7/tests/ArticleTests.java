@@ -3,6 +3,8 @@ package RefactoringEx7.tests;
 import RefactoringEx7.lib.CoreTestCase;
 import RefactoringEx7.lib.ui.ArticlePageObject;
 import RefactoringEx7.lib.ui.SearchPageObject;
+import RefactoringEx7.lib.ui.factories.ArticlePageObjectFactory;
+import RefactoringEx7.lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class ArticleTests extends CoreTestCase {
@@ -10,11 +12,12 @@ public class ArticleTests extends CoreTestCase {
 
     @Test
     public void testTitlePresentWithoutWait_ex6() {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
+
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Havana");
-        searchPageObject.clickByArticleWithSubstring("Capital and largest city of Cuba");
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.assertElementPresent();
     }
 
@@ -22,18 +25,18 @@ public class ArticleTests extends CoreTestCase {
     @Test
     public void testCompareArticleTitle() {
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
 
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Havana");
-        searchPageObject.clickByArticleWithSubstring("Capital and largest city of Cuba");
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String articleTitle = articlePageObject.getArticleTitle();
 
         assertEquals(
                 "We see unexpected title!",
-                "Havana",
+                "Java (programming language)",
                 articleTitle
         );
     }
@@ -41,13 +44,13 @@ public class ArticleTests extends CoreTestCase {
     @Test
     public void testSwipeArticle() {
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
 
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Appium");
-        searchPageObject.clickByArticleWithSubstring("Appium");
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.clickByArticleWithSubstring("Java (programming language)");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+     ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
         articlePageObject.swipeToFooter();
     }
